@@ -1,0 +1,15 @@
+{
+	"name": "kedarshiraladfproject-dev",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "517a8388-b91e-43a9-8ae0-5feefd5b9d57",
+		"tenantId": "39b03722-b836-496a-85ec-850f0957ca6b"
+	}
+}

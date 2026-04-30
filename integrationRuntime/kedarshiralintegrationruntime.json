@@ -1,0 +1,6 @@
+{
+	"name": "kedarshiralintegrationruntime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
