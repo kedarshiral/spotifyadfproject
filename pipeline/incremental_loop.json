@@ -336,31 +336,31 @@
 				"type": "array",
 				"defaultValue": [
 					{
-						"schema": "dbo",
+						"schema": "retail",
 						"table": "DimUser",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
-						"schema": "dbo",
+						"schema": "retail",
 						"table": "DimTrack",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
-						"schema": "dbo",
+						"schema": "retail",
 						"table": "DimDate",
 						"cdc_col": "date",
 						"from_date": ""
 					},
 					{
-						"schema": "dbo",
+						"schema": "retail",
 						"table": "DimArtist",
 						"cdc_col": "updated_at",
 						"from_date": ""
 					},
 					{
-						"schema": "dbo",
+						"schema": "retail",
 						"table": "FactStream",
 						"cdc_col": "stream_timestamp",
 						"from_date": ""
