@@ -1,0 +1,12 @@
+{
+	"name": "ds_config_pgadmin",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_onprem_postgres",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "PostgreSqlV2Table",
+		"schema": []
+	}
+}

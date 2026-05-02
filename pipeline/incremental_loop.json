@@ -3,11 +3,23 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "ForEach1",
+				"name": "ForEachTable",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "lookup_config",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
+					"items": {
+						"value": "@activity('lookup_config').output.value",
+						"type": "Expression"
+					},
+					"isSequential": false,
 					"activities": [
 						{
 							"name": "PgadminToLake",
@@ -21,12 +33,6 @@
 								},
 								{
 									"activity": "current",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								},
-								{
-									"activity": "tablename",
 									"dependencyConditions": [
 										"Succeeded"
 									]
@@ -44,7 +50,7 @@
 								"source": {
 									"type": "PostgreSqlV2Source",
 									"query": {
-										"value": "select * from @{item().schema}.@{item().table} where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Lastcdc').output.value[0].cdc,item().from_date)}' ",
+										"value": "select * from @{item().schema}.@{item().tab} where @{item().cdc_col} > '@{if(empty(item().from_date),activity('Lastcdc').output.value[0].cdc,item().from_date)}' ",
 										"type": "Expression"
 									},
 									"queryTimeout": "02:00:00"
@@ -83,11 +89,11 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@item().table",
+											"value": "@item().tab",
 											"type": "Expression"
 										},
 										"file": {
-											"value": "@concat(item().table,'_', variables('current'))",
+											"value": "@concat(item().tab,'_', variables('current'))",
 											"type": "Expression"
 										}
 									}
@@ -124,7 +130,7 @@
 									"parameters": {
 										"container": "bronze",
 										"folder": {
-											"value": "@{item().table}_cdc",
+											"value": "@{item().tab}_cdc",
 											"type": "Expression"
 										},
 										"file": "cdc.json"
@@ -187,10 +193,13 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@pipeline().parameters.table",
+														"value": "@item().tab",
 														"type": "Expression"
 													},
-													"file": "@concat(pipeline().parameters.table,'_', variables('current'))"
+													"file": {
+														"value": "@concat(item().tab,'_', variables('current'))",
+														"type": "Expression"
+													}
 												}
 											},
 											"enableLogging": false,
@@ -261,7 +270,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@{variables('table')}_cdc",
+														"value": "@{item().table}_cdc",
 														"type": "Expression"
 													},
 													"file": "empty.json"
@@ -274,7 +283,10 @@
 												"type": "DatasetReference",
 												"parameters": {
 													"container": "bronze",
-													"folder": "cdc",
+													"folder": {
+														"value": "@{item().tab}_cdc",
+														"type": "Expression"
+													},
 													"file": "cdc.json"
 												}
 											}
@@ -296,7 +308,7 @@
 											"source": {
 												"type": "PostgreSqlV2Source",
 												"query": {
-													"value": "select max(@{pipeline().parameters.cdc_col}) as max_cdc from @{pipeline().parameters.schema}.@{pipeline().parameters.table}",
+													"value": "select max(@{item().cdc_col}) as max_cdc from @{item().schema}.@{item().tab}",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00"
@@ -309,65 +321,36 @@
 									}
 								]
 							}
-						},
-						{
-							"name": "tablename",
-							"type": "SetVariable",
-							"dependsOn": [],
-							"policy": {
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"variableName": "table",
-								"value": {
-									"value": "@item().table",
-									"type": "Expression"
-								}
-							}
 						}
 					]
 				}
+			},
+			{
+				"name": "lookup_config",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "PostgreSqlV2Source",
+						"query": "select * from retail.cdc_config",
+						"queryTimeout": "02:00:00"
+					},
+					"dataset": {
+						"referenceName": "ds_config_pgadmin",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
 			}
 		],
-		"parameters": {
-			"loop": {
-				"type": "array",
-				"defaultValue": [
-					{
-						"schema": "retail",
-						"table": "DimUser",
-						"cdc_col": "updated_at",
-						"from_date": ""
-					},
-					{
-						"schema": "retail",
-						"table": "DimTrack",
-						"cdc_col": "updated_at",
-						"from_date": ""
-					},
-					{
-						"schema": "retail",
-						"table": "DimDate",
-						"cdc_col": "date",
-						"from_date": ""
-					},
-					{
-						"schema": "retail",
-						"table": "DimArtist",
-						"cdc_col": "updated_at",
-						"from_date": ""
-					},
-					{
-						"schema": "retail",
-						"table": "FactStream",
-						"cdc_col": "stream_timestamp",
-						"from_date": ""
-					}
-				]
-			}
-		},
 		"variables": {
 			"current": {
 				"type": "String"
