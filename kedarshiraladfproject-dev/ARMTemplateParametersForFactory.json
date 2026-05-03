@@ -11,6 +11,12 @@
 		"ls_datalake_accountKey": {
 			"value": ""
 		},
+		"ls_onprem_postgres_password": {
+			"value": ""
+		},
+		"ls_spotdatalake_accountKey": {
+			"value": ""
+		},
 		"ds_api_json_src_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
 		},
@@ -28,6 +34,18 @@
 		},
 		"ls_github_properties_typeProperties_url": {
 			"value": "https://raw.githubusercontent.com/"
+		},
+		"ls_onprem_postgres_properties_typeProperties_server": {
+			"value": "localhost"
+		},
+		"ls_onprem_postgres_properties_typeProperties_database": {
+			"value": "retail_db"
+		},
+		"ls_onprem_postgres_properties_typeProperties_username": {
+			"value": "postgres"
+		},
+		"ls_spotdatalake_properties_typeProperties_url": {
+			"value": "https://adfkedarstorage.dfs.core.windows.net/"
 		}
 	}
 }
