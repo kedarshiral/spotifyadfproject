@@ -256,7 +256,7 @@
 												"parameters": {
 													"container": "bronze",
 													"folder": {
-														"value": "@{pipeline().parameters.table}_cdc",
+														"value": "@{item().table}_cdc",
 														"type": "Expression"
 													},
 													"file": "empty.json"
@@ -291,7 +291,7 @@
 											"source": {
 												"type": "PostgreSqlV2Source",
 												"query": {
-													"value": "select max(@{pipeline().parameters.cdc_col}) as max_cdc from @{pipeline().parameters.schema}.@{pipeline().parameters.table}",
+													"value": "select max(@{item().cdc_col}) as max_cdc from @{item().schema}.@{item().table}",
 													"type": "Expression"
 												},
 												"queryTimeout": "02:00:00"
