@@ -1,0 +1,12 @@
+{
+	"name": "AzureDatabricks1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-7405604722142576.16.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/f139cc19-0dc1-4104-b54f-d4531e5f36fd/resourceGroups/kedarshiralprojectRG-dev/providers/Microsoft.Databricks/workspaces/adfprojectkedar"
+		}
+	}
+}
